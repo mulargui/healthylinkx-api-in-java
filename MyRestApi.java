@@ -20,7 +20,7 @@ public class MyRestApi {
 		
 		//reply to the request
 		if (jsonlist.isEmpty())
-			return Response.serverError()
+			return Response.noContent()
 			.header("Access-Control-Allow-Origin", "*")
 			.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
 			.allow("OPTIONS")
@@ -35,8 +35,8 @@ public class MyRestApi {
 	
 	@GET
 	@Path("/providers")
-	@Produces(MediaType.TEXT_PLAIN)
-    public String GetProviders(
+	@Produces(MediaType.APPLICATION_JSON)
+    public Response GetProviders(
 		@QueryParam("zipcode") String zipcode,
 		@QueryParam("gender") String gender,
 		@QueryParam("lastname1") String lastname1,
@@ -45,10 +45,23 @@ public class MyRestApi {
 		@QueryParam("specialty") String specialty,
 		@QueryParam("distance") String distance
 	) {
-        return "Providers:"+zipcode+"#"+gender+"#"+
-			lastname1+"#"+lastname2+"#"+lastname3+"#"
-			+specialty+"#"+distance+"#";
-    }
+		Providers pr = new Providers(zipcode,gender,lastname1,lastname2,lastname3,specialty,distance);		
+		JSONArray jsonlist =  pr.service();
+
+		//reply to the request
+		if (jsonlist.isEmpty())
+			return Response.noContent()
+			.header("Access-Control-Allow-Origin", "*")
+			.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+			.allow("OPTIONS")
+			.build();
+		return Response.ok()
+			.entity(jsonlist.toString())
+			.header("Access-Control-Allow-Origin", "*")
+			.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+			.allow("OPTIONS")
+			.build();
+	}
 	
 	@GET
 	@Path("/shortlist")

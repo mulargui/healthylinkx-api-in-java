@@ -4,10 +4,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 
-public class MyDB {
-	ArrayList<String> taxonomy(){
+public class DBTaxonomy {
+	ArrayList<String> getContent(){
 		Connection conn;
 		Statement stmt;
 		ResultSet rs;
@@ -21,18 +22,12 @@ public class MyDB {
 		
 			while (rs.next()) {
 				myList.add(rs.getString(1));
-				
 			}
 
 			rs.close();
 			stmt.close();
 			conn.close();
 		}catch (SQLException ex){
-			// handle any errors
-			//myList.add(ex.getMessage());
-			//myList.add(ex.getSQLState());
-			//myList.add(ex.getErrorCode());
-			
 			//in case of error return an empty string
 			myList.clear();
 		}

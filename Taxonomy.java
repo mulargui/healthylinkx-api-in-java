@@ -8,8 +8,8 @@ public class Taxonomy {
 	@SuppressWarnings("unchecked")
 	JSONArray service(){
 		//get the data from the db
-		MyDB mydb = new MyDB();
-		ArrayList<String> mylist = mydb.taxonomy();
+		DBTaxonomy mydb = new DBTaxonomy();
+		ArrayList<String> mylist = mydb.getContent();
 		
 		//build the json response
 		JSONArray jsonlist = new JSONArray();
