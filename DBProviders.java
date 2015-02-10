@@ -1,4 +1,7 @@
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.lang.SecurityException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,13 +14,24 @@ public class DBProviders {
 		String lastname1, String lastname2, String lastname3, 
 		String specialty
 	){
+		//supporting docker containers. get the address of the mysql container
+		String SQLContainerID="MySQLDB";
+		try{
+			InetAddress Address = InetAddress.getByName(SQLContainerID); 
+			SQLContainerID = Address.getHostAddress();
+		} catch (UnknownHostException e){
+			SQLContainerID = "127.0.0.1";
+		} catch (SecurityException e){
+			SQLContainerID = "127.0.0.1";
+		}
+
 		Connection conn;
 		Statement stmt;
 		ResultSet rs;
 				
 		ArrayList<String[]> myList = new ArrayList<String[]>();
 		try{
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/healthylinkx","root","awsawsdb");
+			conn = DriverManager.getConnection("jdbc:mysql://" + SQLContainerID + "/healthylinkx","root","awsawsdb");
 			
 			//building the query string
 			String query= "SELECT NPI,Provider_Full_Name,Provider_Full_Street,Provider_Full_City FROM npidata2 WHERE (";
